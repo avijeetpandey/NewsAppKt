@@ -6,11 +6,19 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
+interface NewsItemClicked {
+    fun onItemClicked(item: String)
+}
+
 // Adapter class for main recycler view
-class NewsListAdapter(private val items: ArrayList<String>): RecyclerView.Adapter<NewsViewHolder>() {
+class NewsListAdapter(private val items: ArrayList<String>, private val listener: NewsItemClicked): RecyclerView.Adapter<NewsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.news_item, parent, false)
-        return NewsViewHolder(view)
+        val viewHolder = NewsViewHolder(view)
+        view.setOnClickListener {
+            listener.onItemClicked(items[viewHolder.adapterPosition])
+        }
+        return viewHolder
     }
 
     override fun getItemCount(): Int {
